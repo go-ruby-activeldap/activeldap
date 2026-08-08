@@ -34,7 +34,8 @@ func runRuby(t *testing.T, probe, script string) string {
 	if err != nil {
 		t.Fatalf("ruby oracle failed: %v\n%s", err, out)
 	}
-	return strings.TrimSpace(string(out))
+	// Ruby's puts emits CRLF on Windows; normalise so line splits stay clean.
+	return strings.TrimSpace(strings.ReplaceAll(string(out), "\r\n", "\n"))
 }
 
 // TestOracleFilterEscape proves EscapeFilterValue matches Net::LDAP::Filter's own
