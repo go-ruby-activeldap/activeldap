@@ -18,10 +18,11 @@ import (
 func ParseFilter(s string) (Filter, error) { return parseFilterString(s) }
 
 func parseFilterString(s string) (Filter, error) {
-	s = strings.TrimSpace(s)
-	if s == "" {
+	if strings.TrimSpace(s) == "" {
 		return Present("objectClass"), nil
 	}
+	// Keep surrounding whitespace on the source; the parser's ws() skips it, so
+	// a filter passed with leading/trailing spaces parses cleanly.
 	p := &filterParser{src: s}
 	f, err := p.parse()
 	if err != nil {
